@@ -9,6 +9,7 @@ edition = "2021"
 bytemuck = { version = "1.14", features = ["derive"] }
 flume = "0.11.0"
 log = "0.4.21"
+pollster = "0.3.0"
 wgpu = "0.19.3"
 
 # [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
