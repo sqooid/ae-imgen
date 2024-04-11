@@ -6,3 +6,31 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+bytemuck = { version = "1.14", features = ["derive"] }
+flume = "0.11.0"
+log = "0.4.21"
+wgpu = "0.19.3"
+
+# [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# env_logger = "0.11"
+
+# [target.'cfg(target_arch = "wasm32")'.dependencies]
+# console_error_panic_hook = "0.1.7"
+# console_log = "1"
+# fern = "0.6"
+# js-sys = "0.3.69"
+# wasm-bindgen = "0.2.87"
+# wasm-bindgen-futures = "0.4.42"
+# # We need these features in the framework examples and tests
+# web-sys = { version = "0.3.69", features = [
+#   "Location",
+#   "Blob",
+#   "RequestInit",
+#   "RequestMode",
+#   "Request",
+#   "ImageData",
+#   "Response",
+#   "HtmlImageElement",
+#   "WebGl2RenderingContext",
+#   "CanvasRenderingContext2d",
+# ] }
