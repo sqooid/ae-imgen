@@ -47,3 +47,41 @@ pub enum TwoArgFunction {
     Or(ComputeFunction, ComputeFunction),
     Xor(ComputeFunction, ComputeFunction),
 }
+
+impl SingleArgFunction {
+    pub fn arg(&self) -> &ComputeFunction {
+        match self {
+            SingleArgFunction::Sin(arg) => arg,
+            SingleArgFunction::Cos(arg) => arg,
+            SingleArgFunction::Tan(arg) => arg,
+            SingleArgFunction::Atan(arg) => arg,
+            SingleArgFunction::Sinh(arg) => arg,
+            SingleArgFunction::Cosh(arg) => arg,
+            SingleArgFunction::Abs(arg) => arg,
+            SingleArgFunction::Reciprocal(arg) => arg,
+            SingleArgFunction::Square(arg) => arg,
+            SingleArgFunction::SquareRoot(arg) => arg,
+            SingleArgFunction::Loge(arg) => arg,
+        }
+    }
+}
+
+impl TwoArgFunction {
+    pub fn arg<T: Into<usize>>(&self, i: T) -> &ComputeFunction {
+        let index: usize = i.into();
+        match self {
+            TwoArgFunction::Add(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Subtract(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Multiply(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Divide(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Min(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Max(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Avg(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Mod(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Exponent(a1, a2) => [a1, a2][index],
+            TwoArgFunction::And(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Or(a1, a2) => [a1, a2][index],
+            TwoArgFunction::Xor(a1, a2) => [a1, a2][index],
+        }
+    }
+}
