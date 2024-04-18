@@ -28,6 +28,20 @@ impl ShaderFunction for ComputeFunction {
     }
 
     fn generate_shader(self) -> String {
-        todo!()
+        include_str!("../shaders/compute_frame.wgsl")
+            .replace("0.123456789", &self.inner_shader())
+            .to_string()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_generate_shader_string() {
+        let compute_function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
+        let result = compute_function.generate_shader();
+        println!("{}", result);
     }
 }

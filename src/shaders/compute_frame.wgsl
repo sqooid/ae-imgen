@@ -29,7 +29,6 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     var x: f32 = f32(global_id.x) / resolution.x * bounds.w + bounds.x;
     var y: f32 = f32(global_id.y) / resolution.y * bounds.h + bounds.y;
     var index: u32 = global_id.y * resolution.x + global_id.x;
-    // replace next line with inner shader function
-    var value: f32 = 0;
+    var value: f32 = 0.123456789;
     result[index] = value;
 }
