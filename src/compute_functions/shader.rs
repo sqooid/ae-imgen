@@ -60,8 +60,8 @@ pub trait ShaderFunction: Debug {
 impl ShaderFunction for ConstantFunction {
     fn inner_shader(&self) -> String {
         match self {
-            ConstantFunction::Constant(r, g, b) => format!("vec3({},{},{})", r, g, b),
-            ConstantFunction::Coord(dim) => match dim {
+            &ConstantFunction::Constant(r, g, b) => format!("vec3({},{},{})", r, g, b),
+            &ConstantFunction::Coord(dim) => match dim {
                 0 => "vec3(x,x,x)",
                 1 => "vec3(y,y,y)",
                 _ => "vec3(z,z,z)",

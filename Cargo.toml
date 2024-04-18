@@ -12,6 +12,7 @@ flume = "0.11.0"
 image = "0.25.1"
 log = "0.4.21"
 pollster = "0.3.0"
+rand = "0.8.5"
 serde = { version = "1.0.198", features = ["derive"] }
 thiserror = "1.0.58"
 typetag = "0.2.16"

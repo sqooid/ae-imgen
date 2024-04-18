@@ -1,12 +1,3 @@
-use image::RgbImage;
-
-use crate::compute_functions::image::Resolution;
-
-fn encode_image(resolution: &Resolution, buffer: Vec<u8>, path: &str) {
-    let rgb_image = RgbImage::from_vec(resolution.0, resolution.1, buffer).unwrap();
-    rgb_image.save(path).unwrap();
-}
-
 #[cfg(test)]
 mod tests {
     use pollster::block_on;
@@ -19,7 +10,8 @@ mod tests {
         gpu::instance::GpuInstance,
     };
 
-    use super::*;
+    use crate::compute_functions::image::Resolution;
+    use image::RgbImage;
 
     fn test_render() -> Vec<f32> {
         let function: Box<dyn ShaderFunction> =
@@ -32,6 +24,11 @@ mod tests {
         let result = block_on(gpu.generate_buffer(&config, &function)).unwrap();
         println!("{:?}", &result);
         result
+    }
+
+    fn encode_image(resolution: &Resolution, buffer: Vec<u8>, path: &str) {
+        let rgb_image = RgbImage::from_vec(resolution.0, resolution.1, buffer).unwrap();
+        rgb_image.save(path).unwrap();
     }
 
     #[test]

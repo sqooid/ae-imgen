@@ -18,6 +18,7 @@ dependencies = [
  "image",
  "log",
  "pollster",
+ "rand",
  "serde",
  "thiserror",
  "typetag",
