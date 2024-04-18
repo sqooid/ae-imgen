@@ -2,10 +2,7 @@ use std::borrow::Cow;
 
 use wgpu::util::DeviceExt;
 
-use crate::compute_functions::{
-    image::ImageConfig,
-    shader::{ComputeFunction, ShaderFunction},
-};
+use crate::compute_functions::{image::ImageConfig, shader::ShaderFunction};
 
 use super::instance::GpuInstance;
 
@@ -13,7 +10,7 @@ impl GpuInstance {
     pub async fn generate_buffer(
         &self,
         image_config: &ImageConfig,
-        function: &ComputeFunction,
+        function: &Box<dyn ShaderFunction>,
     ) -> Option<Vec<f32>> {
         // Create shader
         let shader_code = function.get_shader_code();
@@ -142,13 +139,17 @@ impl GpuInstance {
 mod tests {
     use pollster::block_on;
 
-    use crate::compute_functions::image::{Bounds, Resolution};
+    use crate::compute_functions::{
+        image::{Bounds, Resolution},
+        shader::{ConstantFunction, SingleArgFunction},
+    };
 
     use super::*;
 
     #[test]
     fn test_render() {
-        let function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
+        let function: Box<dyn ShaderFunction> =
+            Box::new(SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0))));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),

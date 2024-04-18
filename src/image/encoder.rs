@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use image::RgbImage;
 
 use crate::compute_functions::image::Resolution;
@@ -16,7 +14,7 @@ mod tests {
     use crate::{
         compute_functions::{
             image::{Bounds, ImageConfig},
-            shader::ComputeFunction,
+            shader::{ConstantFunction, ShaderFunction, SingleArgFunction},
         },
         gpu::instance::GpuInstance,
     };
@@ -24,7 +22,8 @@ mod tests {
     use super::*;
 
     fn test_render() -> Vec<f32> {
-        let function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
+        let function: Box<dyn ShaderFunction> =
+            Box::new(SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0))));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),
