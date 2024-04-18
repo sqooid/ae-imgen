@@ -141,7 +141,7 @@ mod tests {
 
     use crate::compute_functions::{
         image::{Bounds, Resolution},
-        shader::{ComputeFunction, ConstantFunction, SingleArgFunction},
+        ComputeFunction, ConstantFunction, SingleArgFunction,
     };
 
     use super::*;

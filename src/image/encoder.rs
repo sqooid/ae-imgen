@@ -5,7 +5,7 @@ mod tests {
     use crate::{
         compute_functions::{
             image::{Bounds, ImageConfig},
-            shader::{ComputeFunction, ConstantFunction, SingleArgFunction},
+            ComputeFunction, ConstantFunction, SingleArgFunction,
         },
         gpu::instance::GpuInstance,
     };
