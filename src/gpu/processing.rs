@@ -141,14 +141,16 @@ mod tests {
 
     use crate::compute_functions::{
         image::{Bounds, Resolution},
-        shader::{ConstantFunction, SingleArgFunction},
+        shader::{ComputeFunction, ConstantFunction, SingleArgFunction},
     };
 
     use super::*;
 
     #[test]
     fn test_render() {
-        let function = SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0)));
+        let function = SingleArgFunction::Sin(ComputeFunction::Constant(Box::new(
+            ConstantFunction::Coord(0),
+        )));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),

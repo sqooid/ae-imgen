@@ -5,7 +5,7 @@ mod tests {
     use crate::{
         compute_functions::{
             image::{Bounds, ImageConfig},
-            shader::{ConstantFunction, SingleArgFunction},
+            shader::{ComputeFunction, ConstantFunction, SingleArgFunction},
         },
         gpu::instance::GpuInstance,
     };
@@ -14,7 +14,9 @@ mod tests {
     use image::RgbImage;
 
     fn test_render() -> Vec<f32> {
-        let function = SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0)));
+        let function = SingleArgFunction::Sin(ComputeFunction::Constant(Box::new(
+            ConstantFunction::Coord(0),
+        )));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),

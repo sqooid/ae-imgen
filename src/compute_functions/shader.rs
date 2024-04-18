@@ -3,47 +3,61 @@ use std::fmt::Debug;
 use log::trace;
 use serde::{Deserialize, Serialize};
 
-type SomeFunction = Box<dyn ShaderFunction>;
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum ComputeFunction {
+    Constant(Box<ConstantFunction>),
+    One(Box<SingleArgFunction>),
+    Two(Box<TwoArgFunction>),
+}
 
-#[derive(Debug, Serialize, Deserialize)]
+impl ShaderFunction for ComputeFunction {
+    fn inner_shader(&self) -> String {
+        match self {
+            ComputeFunction::Constant(arg) => arg.inner_shader(),
+            ComputeFunction::One(arg) => arg.inner_shader(),
+            ComputeFunction::Two(arg) => arg.inner_shader(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ConstantFunction {
     Constant(f32, f32, f32),
     Coord(u8),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum SingleArgFunction {
-    Sin(SomeFunction),
-    Cos(SomeFunction),
-    Tan(SomeFunction),
-    Atan(SomeFunction),
-    Sinh(SomeFunction),
-    Cosh(SomeFunction),
-    Abs(SomeFunction),
-    Reciprocal(SomeFunction),
-    Square(SomeFunction),
-    SquareRoot(SomeFunction),
-    Loge(SomeFunction),
+    Sin(ComputeFunction),
+    Cos(ComputeFunction),
+    Tan(ComputeFunction),
+    Atan(ComputeFunction),
+    Sinh(ComputeFunction),
+    Cosh(ComputeFunction),
+    Abs(ComputeFunction),
+    Reciprocal(ComputeFunction),
+    Square(ComputeFunction),
+    SquareRoot(ComputeFunction),
+    Loge(ComputeFunction),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum TwoArgFunction {
-    Add(SomeFunction, SomeFunction),
-    Subtract(SomeFunction, SomeFunction),
-    Multiply(SomeFunction, SomeFunction),
-    Divide(SomeFunction, SomeFunction),
-    Min(SomeFunction, SomeFunction),
-    Max(SomeFunction, SomeFunction),
-    Avg(SomeFunction, SomeFunction),
-    Mod(SomeFunction, SomeFunction),
-    Exponent(SomeFunction, SomeFunction),
-    And(SomeFunction, SomeFunction),
-    Or(SomeFunction, SomeFunction),
-    Xor(SomeFunction, SomeFunction),
+    Add(ComputeFunction, ComputeFunction),
+    Subtract(ComputeFunction, ComputeFunction),
+    Multiply(ComputeFunction, ComputeFunction),
+    Divide(ComputeFunction, ComputeFunction),
+    Min(ComputeFunction, ComputeFunction),
+    Max(ComputeFunction, ComputeFunction),
+    Avg(ComputeFunction, ComputeFunction),
+    Mod(ComputeFunction, ComputeFunction),
+    Exponent(ComputeFunction, ComputeFunction),
+    And(ComputeFunction, ComputeFunction),
+    Or(ComputeFunction, ComputeFunction),
+    Xor(ComputeFunction, ComputeFunction),
 }
 
-#[typetag::serde(tag = "type")]
-pub trait ShaderFunction: Debug {
+pub trait ShaderFunction {
     /// Generates inner shader function code
     fn inner_shader(&self) -> String;
     /// Generate complete shader code
@@ -56,7 +70,6 @@ pub trait ShaderFunction: Debug {
     }
 }
 
-#[typetag::serde]
 impl ShaderFunction for ConstantFunction {
     fn inner_shader(&self) -> String {
         match self {
@@ -71,7 +84,6 @@ impl ShaderFunction for ConstantFunction {
     }
 }
 
-#[typetag::serde]
 impl ShaderFunction for SingleArgFunction {
     fn inner_shader(&self) -> String {
         match self {
@@ -92,7 +104,6 @@ impl ShaderFunction for SingleArgFunction {
     }
 }
 
-#[typetag::serde]
 impl ShaderFunction for TwoArgFunction {
     fn inner_shader(&self) -> String {
         match self {
@@ -142,7 +153,9 @@ mod tests {
 
     #[test]
     fn test_generate_shader_string() {
-        let compute_function = SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0)));
+        let compute_function = SingleArgFunction::Sin(ComputeFunction::Constant(Box::new(
+            ConstantFunction::Coord(0),
+        )));
         let result = compute_function.get_shader_code();
         println!("{}", result);
     }
