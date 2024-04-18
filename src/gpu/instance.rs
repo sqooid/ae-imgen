@@ -1,3 +1,5 @@
+use log::debug;
+
 use crate::error::GpuError;
 
 #[derive(Debug)]
@@ -30,7 +32,10 @@ impl GpuInstance {
             )
             .await
             .unwrap();
-        Ok(Self { device, queue })
+
+        let result = Self { device, queue };
+        debug!("got gpu: {:?}", &result);
+        Ok(result)
     }
 }
 

@@ -1,3 +1,5 @@
+use log::trace;
+
 #[derive(Debug, Clone)]
 pub enum ComputeFunction {
     Constant(f32),
@@ -28,9 +30,11 @@ impl ShaderFunction for ComputeFunction {
     }
 
     fn generate_shader(self) -> String {
-        include_str!("../shaders/compute_frame.wgsl")
+        let shader = include_str!("../shaders/compute_frame.wgsl")
             .replace("0.123456789", &self.inner_shader())
-            .to_string()
+            .to_string();
+        trace!("generated shader:\n{}", &shader);
+        shader
     }
 }
 
