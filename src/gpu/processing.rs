@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use wgpu::util::DeviceExt;
 
 use crate::compute_functions::{
-    image::{self, ImageConfig},
+    image::ImageConfig,
     shader::{ComputeFunction, ShaderFunction},
 };
 
@@ -142,7 +142,7 @@ impl GpuInstance {
 mod tests {
     use pollster::block_on;
 
-    use self::image::{Bounds, Resolution};
+    use crate::compute_functions::image::{Bounds, Resolution};
 
     use super::*;
 
