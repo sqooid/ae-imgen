@@ -33,7 +33,9 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     var x: f32 = f32(global_id.x % resolution.x) / f32(resolution.x) * bounds.w + bounds.x;
     var y: f32 = f32(global_id.x / resolution.y) / f32(resolution.y) * bounds.h + bounds.y;
     var z: f32 = bounds.z;
-    var index: u32 = global_id.x;
-    var value: f32 = 0.123456789;
-    result[index] = f32(value);
+    var index: u32 = global_id.x * 3;
+    var value: vec3<f32> = 0.123456789;
+    result[index] = value[0];
+    result[index + 1] = value[1];
+    result[index + 2] = value[2];
 }

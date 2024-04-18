@@ -43,7 +43,7 @@ impl GpuInstance {
             });
 
         let pixels = image_config.resolution.0 * image_config.resolution.1;
-        let buffer_size = pixels * 4;
+        let buffer_size = pixels * 4 * 3;
         // Create output buffer
         let output_buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
             label: None,
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
+        let function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),
