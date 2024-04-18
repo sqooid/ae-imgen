@@ -10,13 +10,13 @@ pub enum ComputeFunction {
 
 pub trait ShaderFunction {
     /// Generates inner shader function code
-    fn inner_shader(self) -> String;
+    fn inner_shader(&self) -> String;
     /// Generate complete shader code
-    fn generate_shader(self) -> String;
+    fn get_shader_code(&self) -> String;
 }
 
 impl ShaderFunction for ComputeFunction {
-    fn inner_shader(self) -> String {
+    fn inner_shader(&self) -> String {
         match self {
             ComputeFunction::Constant(value) => value.to_string(),
             ComputeFunction::Coord(dim) => match dim {
@@ -29,7 +29,7 @@ impl ShaderFunction for ComputeFunction {
         }
     }
 
-    fn generate_shader(self) -> String {
+    fn get_shader_code(&self) -> String {
         let shader = include_str!("../shaders/compute_frame.wgsl")
             .replace("0.123456789", &self.inner_shader())
             .to_string();
@@ -45,7 +45,7 @@ mod tests {
     #[test]
     fn test_generate_shader_string() {
         let compute_function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
-        let result = compute_function.generate_shader();
+        let result = compute_function.get_shader_code();
         println!("{}", result);
     }
 }
