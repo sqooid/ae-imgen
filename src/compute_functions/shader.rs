@@ -4,7 +4,7 @@ use log::trace;
 pub enum ComputeFunction {
     // Constants
     Constant(f32, f32, f32),
-    Coord,
+    Coord(u8),
     // One arg
     Sin(Box<ComputeFunction>),
     Cos(Box<ComputeFunction>),
@@ -43,7 +43,12 @@ impl ShaderFunction for ComputeFunction {
     fn inner_shader(&self) -> String {
         match self {
             ComputeFunction::Constant(r, g, b) => format!("vec3({},{},{})", r, g, b),
-            ComputeFunction::Coord => "vec3(x,y,z)".to_string(),
+            ComputeFunction::Coord(dim) => match dim {
+                0 => "vec3(x,x,x)",
+                1 => "vec3(y,y,y)",
+                _ => "vec3(z,z,z)",
+            }
+            .to_string(),
             ComputeFunction::Sin(arg) => format!("sin({})", arg.inner_shader()),
             ComputeFunction::Cos(arg) => format!("cos({})", arg.inner_shader()),
             ComputeFunction::Tan(arg) => format!("tan({})", arg.inner_shader()),
@@ -111,7 +116,7 @@ mod tests {
 
     #[test]
     fn test_generate_shader_string() {
-        let compute_function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord));
+        let compute_function = ComputeFunction::Sin(Box::new(ComputeFunction::Coord(0)));
         let result = compute_function.get_shader_code();
         println!("{}", result);
     }
