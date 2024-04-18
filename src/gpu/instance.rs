@@ -17,7 +17,7 @@ impl GpuInstance {
         let adapter = instance
             .request_adapter(&wgpu::RequestAdapterOptions::default())
             .await
-            .ok_or_else(|| GpuError::NoAdapter)?;
+            .ok_or(GpuError::NoAdapter)?;
 
         // `request_device` instantiates the feature specific connection to the GPU, defining some parameters,
         //  `features` being the available features.

@@ -10,7 +10,7 @@ impl GpuInstance {
     pub async fn generate_buffer(
         &self,
         image_config: &ImageConfig,
-        function: &Box<dyn ShaderFunction>,
+        function: &dyn ShaderFunction,
     ) -> Option<Vec<f32>> {
         // Create shader
         let shader_code = function.get_shader_code();
@@ -148,8 +148,7 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let function: Box<dyn ShaderFunction> =
-            Box::new(SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0))));
+        let function = SingleArgFunction::Sin(Box::new(ConstantFunction::Coord(0)));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),
