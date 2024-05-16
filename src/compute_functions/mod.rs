@@ -6,9 +6,10 @@ pub mod utils;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ComputeFunction {
-    Constant(Box<ConstantFunction>),
+    Zero(Box<ConstantFunction>),
     One(Box<SingleArgFunction>),
     Two(Box<TwoArgFunction>),
+    Placeholder,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

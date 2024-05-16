@@ -8,3 +8,9 @@ pub enum GpuError {
     #[error("Failed to request device: {0}")]
     RequestDeviceError(RequestDeviceError),
 }
+
+#[derive(Debug, Error)]
+pub enum ApplicationError {
+    #[error("Bad argument")]
+    BadArg,
+}

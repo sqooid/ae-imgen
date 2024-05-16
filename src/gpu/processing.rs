@@ -148,9 +148,8 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let function = SingleArgFunction::Sin(ComputeFunction::Constant(Box::new(
-            ConstantFunction::Coord(0),
-        )));
+        let function =
+            SingleArgFunction::Sin(ComputeFunction::Zero(Box::new(ConstantFunction::Coord(0))));
         let config = ImageConfig {
             resolution: Resolution::new(10, 10),
             bounds: Bounds::new(0.0, 0.0, 0.0, 1.0, 1.0),

@@ -18,9 +18,10 @@ pub trait ShaderFunction {
 impl ShaderFunction for ComputeFunction {
     fn inner_shader(&self) -> String {
         match self {
-            ComputeFunction::Constant(arg) => arg.inner_shader(),
+            ComputeFunction::Zero(arg) => arg.inner_shader(),
             ComputeFunction::One(arg) => arg.inner_shader(),
             ComputeFunction::Two(arg) => arg.inner_shader(),
+            ComputeFunction::Placeholder => todo!(),
         }
     }
 }
@@ -108,9 +109,8 @@ mod tests {
 
     #[test]
     fn test_generate_shader_string() {
-        let compute_function = SingleArgFunction::Sin(ComputeFunction::Constant(Box::new(
-            ConstantFunction::Coord(0),
-        )));
+        let compute_function =
+            SingleArgFunction::Sin(ComputeFunction::Zero(Box::new(ConstantFunction::Coord(0))));
         let result = compute_function.get_shader_code();
         println!("{}", result);
     }
