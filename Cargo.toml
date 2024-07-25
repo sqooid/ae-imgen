@@ -1,3 +1,4 @@
+workspace = { members = ["enum_methods", "enum_methods/enum_methods_derive"] }
 
 [package]
 name = "ae-gen"
@@ -19,7 +20,8 @@ serde = { version = "1.0.198", features = ["derive"] }
 thiserror = "1.0.58"
 typetag = "0.2.16"
 wgpu = "0.19.3"
-
+enum_methods = { path = "./enum_methods" }
+enum_methods_derive = { path = "./enum_methods/enum_methods_derive" }
 
 # [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 # env_logger = "0.11"

@@ -1,3 +1,4 @@
+use enum_methods::EnumMethods;
 use rand::seq::SliceRandom;
 use std::{collections::VecDeque, vec};
 use strum::IntoEnumIterator;
@@ -27,10 +28,10 @@ impl ComputeFunction {
             nodes.push((current, parent));
             match current {
                 ComputeFunction::Zero(_inner) => {}
-                ComputeFunction::One(inner) => frontier.push_back((inner.arg(), current)),
+                ComputeFunction::One(inner) => frontier.push_back((inner.get_arg(0usize), current)),
                 ComputeFunction::Two(inner) => {
-                    frontier.push_back((inner.arg(0usize), current));
-                    frontier.push_back((inner.arg(1usize), current))
+                    frontier.push_back((inner.get_arg(0usize), current));
+                    frontier.push_back((inner.get_arg(1usize), current))
                 }
                 ComputeFunction::Placeholder => todo!(),
             }
@@ -68,6 +69,16 @@ impl ComputeFunction {
         };
         let func = functions.choose(&mut rng).ok_or(ApplicationError::BadArg)?;
         Ok(func.to_owned())
+    }
+
+    pub fn random_deep(depth: u32) -> Result<Self, ApplicationError> {
+        let weight = (depth - 1) as f32;
+        let function = Self::random(&[1.0, weight, weight])?;
+        Ok(match function {
+            ComputeFunction::One(f) => todo!(),
+            ComputeFunction::Two(f) => todo!(),
+            s => s,
+        })
     }
 }
 

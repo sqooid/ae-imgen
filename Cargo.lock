@@ -14,6 +14,8 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "bytemuck",
+ "enum_methods",
+ "enum_methods_derive",
  "flume",
  "image",
  "log",
@@ -380,6 +382,18 @@ name = "either"
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a47c1c47d2f5964e29c61246e81db715514cd532db6b5116a25ea3c03d6780a2"
+
+[[package]]
+name = "enum_methods"
+version = "0.1.0"
+
+[[package]]
+name = "enum_methods_derive"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn 2.0.58",
+]
 
 [[package]]
 name = "equivalent"
