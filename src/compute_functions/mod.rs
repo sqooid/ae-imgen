@@ -1,14 +1,16 @@
 use serde::{Deserialize, Serialize};
+use strum::EnumIter;
 
 pub mod image;
 pub mod shader;
 pub mod utils;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub enum ComputeFunction {
     Zero(Box<ConstantFunction>),
     One(Box<SingleArgFunction>),
     Two(Box<TwoArgFunction>),
+    #[default]
     Placeholder,
 }
 
@@ -18,7 +20,7 @@ pub enum ConstantFunction {
     Coord(u8),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, EnumIter)]
 pub enum SingleArgFunction {
     Sin(ComputeFunction),
     Cos(ComputeFunction),
@@ -33,7 +35,7 @@ pub enum SingleArgFunction {
     Loge(ComputeFunction),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, EnumIter)]
 pub enum TwoArgFunction {
     Add(ComputeFunction, ComputeFunction),
     Subtract(ComputeFunction, ComputeFunction),

@@ -1,5 +1,6 @@
 use rand::seq::SliceRandom;
 use std::{collections::VecDeque, vec};
+use strum::IntoEnumIterator;
 
 use rand::{
     distributions::{Distribution, Standard, WeightedIndex},
@@ -16,7 +17,7 @@ use super::ComputeFunction;
 impl ComputeFunction {
     /// BFS search through self as root
     /// Returns in order in form (node, parent)
-    pub fn bfs<'a>(&'a self) -> Vec<(&'a Self, &'a Self)> {
+    pub fn bfs(&self) -> Vec<(&Self, &Self)> {
         let mut frontier: VecDeque<(&ComputeFunction, &ComputeFunction)> =
             VecDeque::from([(self, self)]);
         let mut nodes: Vec<(&ComputeFunction, &ComputeFunction)> = vec![];
@@ -34,9 +35,14 @@ impl ComputeFunction {
                 ComputeFunction::Placeholder => todo!(),
             }
         }
-        return nodes;
+        nodes
     }
 
+    /// Returns a random function with placeholder arguments
+    ///
+    /// # Arguments
+    ///
+    /// * `arg_weights` - Probability weights for returned fucnction having 0, 1 or 2} arguments
     pub fn random(arg_weights: &[f32; 3]) -> Result<Self, ApplicationError> {
         let arg_indices = [0, 1, 2];
         let dist = WeightedIndex::new(arg_weights).map_err(|_| ApplicationError::BadArg)?;
@@ -53,80 +59,14 @@ impl ComputeFunction {
                     ComputeFunction::Zero(Box::new(ConstantFunction::Coord(dim))),
                 ]
             }
-            1 => {
-                vec![
-                    ComputeFunction::One(Box::new(SingleArgFunction::Sin(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Cos(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Tan(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Atan(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Cosh(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Abs(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Reciprocal(
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Square(Self::Placeholder))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::SquareRoot(
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::One(Box::new(SingleArgFunction::Loge(Self::Placeholder))),
-                ]
-            }
-            _ => {
-                vec![
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Add(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Subtract(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Multiply(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Divide(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Min(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Max(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Avg(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Mod(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Exponent(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::And(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Or(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                    ComputeFunction::Two(Box::new(TwoArgFunction::Xor(
-                        Self::Placeholder,
-                        Self::Placeholder,
-                    ))),
-                ]
-            }
+            1 => SingleArgFunction::iter()
+                .map(|x| ComputeFunction::One(Box::new(x)))
+                .collect(),
+            _ => TwoArgFunction::iter()
+                .map(|x| ComputeFunction::Two(Box::new(x)))
+                .collect(),
         };
-        let func = functions
-            .choose(&mut rng)
-            .ok_or_else(|| ApplicationError::BadArg)?;
+        let func = functions.choose(&mut rng).ok_or(ApplicationError::BadArg)?;
         Ok(func.to_owned())
     }
 }
